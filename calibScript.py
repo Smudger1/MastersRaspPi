@@ -17,6 +17,8 @@ objp = objp * size_of_chessboard_squares_mm
 objpoints = [] # 3d point in real world space
 imgpoints = [] # 2d points in image plane.
 
+print("Setup complete.")
+
 images = glob.glob('./calibImgs/calibImage*.jpg')
 
 for fname in images:
