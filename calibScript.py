@@ -3,7 +3,7 @@ import cv2 as cv
 import glob
 import pickle
 
-chessboard_size = (10, 7)  # Number of inner corners per chessboard row and column
+chessboard_size = (9, 6)  # Number of inner corners per chessboard row and column
 image_size = (4608, 2592)  # Size of the images used for calibration
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
