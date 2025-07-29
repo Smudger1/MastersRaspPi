@@ -22,8 +22,11 @@ print("Setup complete.")
 images = glob.glob('./calibImgs/calibImage*.jpg')
 
 for fname in images:
+    print(f"Processing {fname}...")
     img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    cv.imshow('img', gray)
+    print("Finding chessboard corners...")
     ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
     if ret == True:
         objpoints.append(objp)
