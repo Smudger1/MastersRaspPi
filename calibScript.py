@@ -37,4 +37,19 @@ for fname in images:
         # Optionally save the image with drawn corners for later inspection
         cv.imwrite(f'./calibImgs/processed_{fname.split("/")[-1]}', img)
 
-# cv.destroyAllWindows()     # Remove or comment out
+
+print("Chessboard corners found in all images. Proceeding with calibration...")
+ret, camera_matrix, dist_coeffs, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, image_size, None, None)
+if ret:
+    print("Calibration successful.")
+    print("Camera matrix:")
+    print(camera_matrix)
+    print("Distortion coefficients:")
+    print(dist_coeffs)
+
+    # Save the calibration data to a file
+    with open('./calibImgs/calibration_data.pkl', 'wb') as f:
+        pickle.dump((camera_matrix, dist_coeffs), f)
+
+
+print("Calibration data saved to './calibImgs/calibration_data.pkl'.")
