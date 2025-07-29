@@ -25,14 +25,13 @@ for fname in images:
     print(f"Processing {fname}...")
     img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    cv.imshow('img', gray)
     print("Finding chessboard corners...")
     ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
     if ret == True:
         objpoints.append(objp)
         imgpoints.append(corners)
         cv.drawChessboardCorners(img, chessboard_size, corners, ret)
-    cv.imshow('img', img)
-    cv.waitKey(500)
+        # Optionally save the image with drawn corners for later inspection
+        cv.imwrite(f'./calibImgs/processed_{fname.split("/")[-1]}', img)
 
-cv.destroyAllWindows()
+# cv.destroyAllWindows()     # Remove or comment out
