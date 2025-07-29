@@ -27,6 +27,9 @@ for fname in images:
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     print("Finding chessboard corners...")
     ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
+    if not ret:
+        print(f"Chessboard corners not found in {fname}. Skipping this image.")
+        continue
     if ret == True:
         objpoints.append(objp)
         imgpoints.append(corners)
