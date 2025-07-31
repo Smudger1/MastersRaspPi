@@ -12,6 +12,7 @@ if not os.path.exists("./calibImgs"):
 print("Starting image capture for both cameras...")
 
 master_cam = Camera()
+master_cam.still_size = (1280, 720)  # Set the resolution for the camera
 
 slave_cam = cv.VideoCapture(rtsp_URL)  # Adjust the index if necessary
 

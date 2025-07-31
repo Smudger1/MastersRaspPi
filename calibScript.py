@@ -9,6 +9,8 @@ chessboard_size = (12, 8)  # Number of inner corners per chessboard row and colu
 master_cam_image_size = (4608, 2592)  # Size of the images used for calibration
 slave_cam_image_size = (640, 480)  # Size of the images used for calibration
 
+image_size = (1280, 720)  # Set the image size for both cameras
+
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((chessboard_size[0] * chessboard_size[1], 3), np.float32)
 objp[:,:2] = np.mgrid[0:chessboard_size[0],0:chessboard_size[1]].T.reshape(-1,2)
@@ -66,8 +68,8 @@ for fname in images_slave:
 print("Chessboard corners found in all images. Proceeding with calibration...")
 
 
-retM, camera_matrixM, dist_coeffsM, rvecsM, tvecsM = cv.calibrateCamera(objpoints, imgpointsM, master_cam_image_size, None, None)
-retS, camera_matrixS, dist_coeffsS, rvecsS, tvecsS = cv.calibrateCamera(objpoints, imgpointsS, slave_cam_image_size, None, None)
+retM, camera_matrixM, dist_coeffsM, rvecsM, tvecsM = cv.calibrateCamera(objpoints, imgpointsM, image_size, None, None)
+retS, camera_matrixS, dist_coeffsS, rvecsS, tvecsS = cv.calibrateCamera(objpoints, imgpointsS, image_size, None, None)
 
 flags = 0
 flags |= cv.CALIB_FIX_INTRINSIC
@@ -80,7 +82,7 @@ retStereo, camera_matrix_stereo, dist_coeffs_stereo, rvecs_stereo, tvecs_stereo 
     imgpointsM, imgpointsS,
     camera_matrixM, dist_coeffsM,
     camera_matrixS, dist_coeffsS,
-    master_cam_image_size, criteria_stereo, flags
+    image_size, criteria_stereo, flags
 )
 
 if retStereo:
