@@ -85,13 +85,18 @@ retStereo, cameraM_matrix_stereo, dist_coeffsM_stereo, cameraS_matrix_stereo, di
 if retStereo:
     print("Calibration successful.")
     print("Camera matrix:")
-    print(camera_matrix_stereo)
+    print(cameraM_matrix_stereo)
     print("Distortion coefficients:")
-    print(dist_coeffs_stereo)
+    print(dist_coeffsM_stereo)
+    print("Calibration successful.")
+    print("Camera matrix:")
+    print(cameraS_matrix_stereo)
+    print("Distortion coefficients:")
+    print(dist_coeffsS_matrix_stereo)
 
     # Save the calibration data to a file
     with open('./calibImgs/calibration_data.pkl', 'wb') as f:
-        pickle.dump((camera_matrix_stereo, dist_coeffs_stereo), f)
+        pickle.dump((cameraM_matrix_stereo, dist_coeffsM_stereo, cameraS_matrix_stereo, dist_coeffsS_matrix_stereo), f)
 
 
 print("Calibration data saved to './calibImgs/calibration_data.pkl'.")
