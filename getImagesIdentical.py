@@ -19,9 +19,10 @@ if not slave_cam.isOpened():
     print("Error: Could not open video stream.")
     exit()
 
-master_cam.start_preview()
 
 for i in range(10):
+    cv.waitKey(2000)  # Wait for 2 seconds between captures
+    print(f"Capturing image {i+1} ...")
     ret, frame = slave_cam.read()
     if not ret:
         print("Error: Could not read frame.")
@@ -30,8 +31,6 @@ for i in range(10):
     master_cam.take_photo(f"./calibImgs/calibImageMaster_{i}.jpg")  # Save the image
 
     print(f"Captured image {i+1}")
-    cv.waitKey(2000)  # Wait for 2 seconds between captures
 
-master_cam.stop_preview()
 slave_cam.release()
 cv.destroyAllWindows()
