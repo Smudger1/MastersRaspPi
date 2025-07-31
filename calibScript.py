@@ -33,6 +33,9 @@ if not images_master or not images_slave:
     print("No images found for Master or Slave camera calibration.")
     exit()
 
+images_master.sort()
+images_slave.sort()
+
 # Pair images by index (assuming same number and order)
 num_pairs = min(len(images_master), len(images_slave))
 for i in range(num_pairs):
