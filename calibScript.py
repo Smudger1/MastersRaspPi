@@ -5,7 +5,7 @@ import pickle
 
 print("###### Starting Setup for camera calibration ######")
 
-chessboard_size = (9, 6)  # Number of inner corners per chessboard row and column
+chessboard_size = (12, 8)  # Number of inner corners per chessboard row and column
 master_cam_image_size = (4608, 2592)  # Size of the images used for calibration
 slave_cam_image_size = (640, 480)  # Size of the images used for calibration
 
