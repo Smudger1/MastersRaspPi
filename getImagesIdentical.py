@@ -1,6 +1,7 @@
 from picamzero import Camera
 import os
 import cv2 as cv
+from time import sleep
 
 rtsp_URL = "http://192.168.0.169:81/stream"
 
@@ -22,7 +23,7 @@ if not slave_cam.isOpened():
 
 
 for i in range(10):
-    cv.waitKey(2000)  # Wait for 2 seconds between captures
+    sleep(2)  # Wait for 2 seconds between captures
     print(f"Capturing image {i+1} ...")
     ret, frame = slave_cam.read()
     if not ret:
