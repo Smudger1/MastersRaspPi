@@ -74,7 +74,7 @@ flags |= cv.CALIB_FIX_INTRINSIC
 
 criteria_stereo = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-retStereo, camera_matrix_stereo, dist_coeffs_stereo, rvecs_stereo, tvecs_stereo = cv.stereoCalibrate(
+retStereo, camera_matrix_stereo, dist_coeffs_stereo, rot_stereo, tvecs_stereo, essentialMatrix, fundamentalMatrix = cv.stereoCalibrate(
     objpoints, 
     imgpointsM, imgpointsS,
     camera_matrixM, dist_coeffsM,
