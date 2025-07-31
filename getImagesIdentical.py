@@ -23,7 +23,7 @@ if not slave_cam.isOpened():
 
 
 for i in range(10):
-    sleep(2)  # Wait for 2 seconds between captures
+    sleep(4)  # Wait for 4 seconds between captures
     print(f"Capturing image {i+1} ...")
     ret, frame = slave_cam.read()
     if not ret:
