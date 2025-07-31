@@ -34,13 +34,13 @@ if not images_master or not images_slave:
     exit()
 
 for fname in images_master:
-    print(f"Processing {fname}...")
+    print(f"Processing Master {fname}...")
     img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     print("Finding chessboard corners...")
     ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
     if not ret:
-        print(f"Chessboard corners not found in {fname}. Skipping this image.")
+        print(f"Chessboard corners not found in Master {fname}. Skipping this image.")
         continue
     if ret == True:
         objpoints.append(objp)
@@ -50,13 +50,13 @@ for fname in images_master:
         cv.imwrite(f'./calibImgs/processed_{fname.split("/")[-1]}', img)
 
 for fname in images_slave:
-    print(f"Processing {fname}...")
+    print(f"Processing Slave {fname}...")
     img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     print("Finding chessboard corners...")
     ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
     if not ret:
-        print(f"Chessboard corners not found in {fname}. Skipping this image.")
+        print(f"Chessboard corners not found in Slave {fname}. Skipping this image.")
         continue
     if ret == True:
         objpoints.append(objp)
