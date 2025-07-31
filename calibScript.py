@@ -33,37 +33,31 @@ if not images_master or not images_slave:
     print("No images found for Master or Slave camera calibration.")
     exit()
 
-for fname in images_master:
-    print(f"Processing Master {fname}...")
-    img = cv.imread(fname)
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    print("Finding chessboard corners...")
-    ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
-    if not ret:
-        print(f"Chessboard corners not found in Master {fname}. Skipping this image.")
-        continue
-    if ret == True:
-        objpoints.append(objp)
-        imgpointsM.append(corners)
-        cv.drawChessboardCorners(img, chessboard_size, corners, ret)
-        # Optionally save the image with drawn corners for later inspection
-        cv.imwrite(f'./calibImgs/processed_{fname.split("/")[-1]}', img)
+# Pair images by index (assuming same number and order)
+num_pairs = min(len(images_master), len(images_slave))
+for i in range(num_pairs):
+    fname_master = images_master[i]
+    fname_slave = images_slave[i]
 
-for fname in images_slave:
-    print(f"Processing Slave {fname}...")
-    img = cv.imread(fname)
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    print("Finding chessboard corners...")
-    ret, corners = cv.findChessboardCorners(gray, chessboard_size, None)
-    if not ret:
-        print(f"Chessboard corners not found in Slave {fname}. Skipping this image.")
-        continue
-    if ret == True:
+    img_master = cv.imread(fname_master)
+    img_slave = cv.imread(fname_slave)
+
+    gray_master = cv.cvtColor(img_master, cv.COLOR_BGR2GRAY)
+    gray_slave = cv.cvtColor(img_slave, cv.COLOR_BGR2GRAY)
+
+    retM, cornersM = cv.findChessboardCorners(gray_master, chessboard_size, None)
+    retS, cornersS = cv.findChessboardCorners(gray_slave, chessboard_size, None)
+
+    if retM and retS:
         objpoints.append(objp)
-        imgpointsS.append(corners)
-        cv.drawChessboardCorners(img, chessboard_size, corners, ret)
-        # Optionally save the image with drawn corners for later inspection
-        cv.imwrite(f'./calibImgs/processed_{fname.split("/")[-1]}', img)
+        imgpointsM.append(cornersM)
+        imgpointsS.append(cornersS)
+        cv.drawChessboardCorners(img_master, chessboard_size, cornersM, retM)
+        cv.drawChessboardCorners(img_slave, chessboard_size, cornersS, retS)
+        cv.imwrite(f'./calibImgs/processed_{fname_master.split("/")[-1]}', img_master)
+        cv.imwrite(f'./calibImgs/processed_{fname_slave.split("/")[-1]}', img_slave)
+    else:
+        print(f"Skipping pair {fname_master}, {fname_slave} (corners not found in both)")
 
 print("Chessboard corners found in all images. Proceeding with calibration...")
 
