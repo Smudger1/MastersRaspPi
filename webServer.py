@@ -4,22 +4,29 @@ app = Flask(__name__)
 
 received_data = {'requestedObject': None, 'distance': None}
 
-@app.route('/send_data', methods=['POST'])
-def send_data():
+@app.route('/update_distance', methods=['POST'])
+def update_distance():
     if request.is_json:
         data = request.get_json()
-
-        if data.get('requestedObject') is not None:
-            received_data['requestedObject'] = data['requestedObject']
-        elif data.get('distance') is not None:
+        if 'distance' in data:
             received_data['distance'] = data['distance']
+            print(f"Distance updated: {received_data['distance']}")
+            return jsonify({"status": "success", "message": "Distance updated successfully"}), 200
         else:
-            # If neither requestedObject nor distance is provided, return an error
-            return jsonify({"status": "error", "message": "requestedObject or distance is required"}), 400
-        
-        print("Data received successfully.")
-        print("Received data:", received_data)
-        return jsonify({"status": "success", "data": received_data}), 200
+            return jsonify({"status": "error", "message": "Distance not provided"}), 400
+    else:
+        return jsonify({"status": "error", "message": "Invalid JSON"}), 400
+    
+@app.route('/update_requested_object', methods=['POST'])
+def update_requested_object():
+    if request.is_json:
+        data = request.get_json()
+        if 'requestedObject' in data:
+            received_data['requestedObject'] = data['requestedObject']
+            print(f"Requested object updated: {received_data['requestedObject']}")
+            return jsonify({"status": "success", "message": "Requested object updated successfully"}), 200
+        else:
+            return jsonify({"status": "error", "message": "Requested object not provided"}), 400
     else:
         return jsonify({"status": "error", "message": "Invalid JSON"}), 400
     

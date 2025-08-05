@@ -5,13 +5,20 @@ from ultralytics import YOLO
 from picamzero import Camera
 import requests
 from time import sleep
-from locationCalc import calculateDistance, calculateAngle
+from locationCalc import calculateDistanceBetweenObjects, calculateAngle, calculateCenter
+import os
+from getDepthMap import getDepthMap
 
 rtsp_URL = "http://192.168.0.169:81/stream"
 
-def setup():
+def setup():    
+    if not os.path.exists("./objectDetectionImgs"):
+        ## Create directory for object detection images if it doesn't exist
+        print("Creating directory for object detection images...")
+        os.makedirs("./objectDetectionImgs")
+
     ## Load the YOLO model
-    model = YOLO("yolov11n.pt")  # Load the YOLO
+    model = YOLO("yolo11n.pt")  # Load the YOLO
     model.export(format="ncnn")  # Export the model to NNC format
     ncnn_model = YOLO("yolo11n_ncnn_model")  # Path to the exported model
     print(f"Model exported to {ncnn_model}")
@@ -52,7 +59,16 @@ def getRequestedObject():
     except requests.RequestException as e:
         print(f"HTTP Request failed: {e}")
         return None
-    return None
+
+def sendDistance(distance):
+    try:
+        response = requests.post("http://localhost:5000/update_distance", json={"distance": distance})
+        if response.status_code == 200:
+            print("Distance sent successfully.")
+        else:
+            print(f"Error sending distance: {response.json().get('message', 'Unknown error')}")
+    except requests.RequestException as e:
+        print(f"HTTP Request failed: {e}")
 
 
 def main():
@@ -61,6 +77,7 @@ def main():
 
     personResult = None
     objectResult = None
+    cameraFeed = None
 
     if not requested_object:
         print("No requested object to track.")
@@ -68,24 +85,34 @@ def main():
 
     while True:
         while requested_object is not None:
-            ret, frame1 = video1.read()  # Read frame from the camera
+
+            # Read frame from both cameras
+            photo_path = "./objectDetectionImgs/frame1.jpg"
+            video1.take_photo(photo_path)
+            frame1 = cv.imread(photo_path)
             ret2, frame2 = video2.read()  # Read frame from the RTSP stream
 
-            if not ret and not ret2:
+            if not frame1 and not frame2:
                 print("Error: Could not read frames.")
                 break
-
+            
             results = ncnn_model(frame1)  # Run inference on the first camera frame
             for result in results:
-                if result.names[result.class_id] == 'person' and personResult is None:
-                    personResult = result
-                    print("Person detected in the first camera.")
-                if result.names[result.class_id] == requested_object and objectResult is None:
-                    objectResult = result
-                    print(f"Detected {requested_object} in the first camera.")
+                # result.boxes.cls is a tensor of class indices
+                class_ids = result.boxes.cls.cpu().numpy().astype(int)
+                for class_id in class_ids:
+                    class_name = result.names[class_id]
+                    if class_name == requested_object and objectResult is None:
+                        print(f"Detected {requested_object} in the first camera.")
+                        objectResult = result
+                    elif class_name == 'person' and personResult is None:
+                        personResult = result
+                        print("Person detected in the first camera.")
+
 
             if personResult is not None and objectResult is not None:
                 print("Found both person and requested object in master camera.")
+                cameraFeed = 1
             else:
                 print("Error: Person or requested object not found in master camera.")
                 print("Looking in second camera... ")
@@ -95,20 +122,42 @@ def main():
 
                 results = ncnn_model(frame2)  # Run inference on the second camera frame
                 for result in results:
-                    if result.names[result.class_id] == 'person' and personResult is None:
-                        personResult = result
-                        print("Person detected in the second camera.")
-                    if result.names[result.class_id] == requested_object and objectResult is None:
-                        objectResult = result
-                        print(f"Detected {requested_object} in the second camera.")
+                    # result.boxes.cls is a tensor of class indices
+                    class_ids = result.boxes.cls.cpu().numpy().astype(int)
+                    for class_id in class_ids:
+                        class_name = result.names[class_id]
+                        if class_name == requested_object and objectResult is None:
+                            print(f"Detected {requested_object} in the second camera.")
+                            objectResult = result
+                        elif class_name == 'person' and personResult is None:
+                            personResult = result
+                            print("Person detected in the second camera.")
+                
+                if personResult is not None and objectResult is not None:
+                    print("Found both person and requested object in slave camera.")
+                    cameraFeed = 2
 
             if personResult is not None and objectResult is not None:
                 print("Calculating angle and distance...")
-                person_coords = personResult.boxes.xyxy[0].numpy()
-                object_coords = objectResult.boxes.xyxy[0].numpy()
+                person_coords = calculateCenter(personResult.boxes.xyxy[0].numpy())
+                object_coords = calculateCenter(objectResult.boxes.xyxy[0].numpy())
                 angle = calculateAngle(person_coords, object_coords)
 
+                print(f"Angle between person and {requested_object}: {angle} degrees")
 
+                if cameraFeed == 1:
+                    depthMap = getDepthMap(frame1)
+                else:
+                    depthMap = getDepthMap(frame2)
+                distanceToPerson = depthMap[int(person_coords[1]), int(person_coords[0])]
+                distanceToObject = depthMap[int(object_coords[1]), int(object_coords[0])]
+
+                distance = calculateDistanceBetweenObjects(angle, distanceToPerson, distanceToObject)
+                print(f"Distance between person and {requested_object}: {distance} meters")
+                sendDistance(distance)
+            else:
+                print("ERROR: Person or requested object not found in either camera.")
+                break
 
             cv.imshow("Camera Feed", frame1)  # Display the camera feed
             cv.imshow("RTSP Stream", frame2)  # Display the RTSP stream
@@ -132,3 +181,6 @@ def main():
     video1.release()
     video2.release()
     cv.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()

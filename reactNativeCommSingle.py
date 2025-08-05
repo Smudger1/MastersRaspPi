@@ -55,6 +55,12 @@ def main():
         video1.take_photo(photo_path)
         frame1 = cv.imread(photo_path)
 
+        try:
+            cv.imshow("Camera Feed", frame1)  # Display the camera feed
+        except Exception as e:
+            print(f"Error displaying frame: {e}")
+            continue
+
         if frame1 is None:
             print("Error: Could not read frame.")
             break

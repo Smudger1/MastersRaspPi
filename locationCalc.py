@@ -37,6 +37,34 @@ def calculateDistance(imageLoc, obj1_pixel_coords, obj2_pixel_coords, obj1_dista
 
     return real_world_distance
 
+def calculateDistanceBetweenObjects(angle, obj1_distance, obj2_distance):
+    """
+    Calculate the distance between two objects based on their distances from the camera and the angle between them.
+
+    :param angle: Angle between the two objects in degrees.
+    :param obj1_distance: Distance of the first object from the camera.
+    :param obj2_distance: Distance of the second object from the camera.
+    :return: Distance between the two objects in meters.
+    """
+    # Convert angle to radians
+    angle_radians = np.radians(angle)
+
+    # Calculate the distance between the two objects using the law of cosines
+    distance = np.sqrt(obj1_distance**2 + obj2_distance**2 - 2 * obj1_distance * obj2_distance * np.cos(angle_radians))
+    return distance
+
+def calculateCenter(obj_pixel_coords):
+    """
+    Calculate the center coordinates of an object based on its pixel coordinates.
+    
+    :param obj_pixel_coords: Pixel coordinates of the object (x1, y1, x2, y2).
+    :return: Center coordinates (center_x, center_y).
+    """
+    x1, y1, x2, y2 = obj_pixel_coords
+    center_x = (x1 + x2) / 2
+    center_y = (y1 + y2) / 2
+    return (center_x, center_y)
+
 
 def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     """
