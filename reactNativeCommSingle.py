@@ -38,7 +38,7 @@ def getRequestedObject():
 def main():
     ncnn_model, video1 = setup()
     requested_object = getRequestedObject()
-
+    print(f"Requested object: {requested_object}")
     while True:
         ret, frame1 = video1.read()  # Read frame from the camera
 

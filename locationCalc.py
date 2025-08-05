@@ -38,7 +38,7 @@ def calculateDistance(imageLoc, obj1_pixel_coords, obj2_pixel_coords, obj1_dista
     return real_world_distance
 
 
-def calculateAngle(imageLoc, obj1_pixel_coords, obj2_pixel_coords):
+def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     """
     Calculate the angle between two objects in an image based on their pixel coordinates.
     
@@ -48,11 +48,6 @@ def calculateAngle(imageLoc, obj1_pixel_coords, obj2_pixel_coords):
     :return: Angle in degrees between the two objects.
     """
     
-    # Load the image
-    image = cv.imread(imageLoc)
-
-    obj1_pixel_coords = (0, 0)  # Replace with actual pixel coordinates of object 1
-    obj2_pixel_coords = (100, 100)  # Replace with actual pixel coordinates of object 2
 
     # Load camera calibration data
     with open("calibration_data.pkl", "rb") as f:
