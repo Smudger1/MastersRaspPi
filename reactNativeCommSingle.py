@@ -8,7 +8,7 @@ rtsp_URL = "http://192.168.0.169:81/stream"
 
 def setup():
     ## Load the YOLO model
-    model = YOLO("yolov11n.pt")  # Load the YOLO
+    model = YOLO("yolo11n.pt")  # Load the YOLO
     model.export(format="ncnn")  # Export the model to NNC format
     ncnn_model = YOLO("yolo11n_ncnn_model")  # Path to the exported model
     print(f"Model exported to {ncnn_model}")
