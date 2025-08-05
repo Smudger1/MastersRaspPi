@@ -1,0 +1,67 @@
+import cv2 as cv
+import numpy as np
+import pickle
+from ultralytics import YOLO
+from picamzero import Camera
+
+rtsp_URL = "http://192.168.0.169:81/stream"
+
+def setup():
+    ## Load the YOLO model
+    model = YOLO("yolov11n.pt")  # Load the YOLO
+    model.export(format="ncnn")  # Export the model to NNC format
+    ncnn_model = YOLO("yolo11n_ncnn_model")  # Path to the exported model
+    print(f"Model exported to {ncnn_model}")
+    print("YOLO model loaded successfully.")
+
+    video1 = Camera()
+    video1.still_size = (1280, 720)  # Set the resolution
+    video1.video_size = (1280, 720)  # Set the video size
+
+    video2 = cv.VideoCapture(rtsp_URL)  # Open the RTSP stream
+    if not video2.isOpened():
+        print("Error: Could not open video stream.")
+        exit()
+    print("Video stream opened successfully.")
+
+    return ncnn_model, video1, video2
+
+def getRequestedObject():
+    # HTTP SERVER REQUEST HANDLING
+
+    # Classes
+    ## names:
+    ## 0: person
+    ## 56: chair
+    ## 57: couch
+    ## 62: tv
+    ## 65: remote
+    ## 73: book
+    return "tv"  # Example object to track
+
+def main():
+    ncnn_model, video1, video2 = setup()
+    requested_object = getRequestedObject()
+
+    while True:
+        ret, frame1 = video1.read()  # Read frame from the camera
+        ret2, frame2 = video2.read()  # Read frame from the RTSP stream
+
+        if not ret and not ret2:
+            print("Error: Could not read frames.")
+            break
+
+        results = ncnn_model(frame1)  # Run inference on the first camera frame
+        for result in results:
+            if result.names[result.class_id] == requested_object:
+                print(f"Detected {requested_object} in the first camera.")
+
+        cv.imshow("Camera Feed", frame1)  # Display the camera feed
+        cv.imshow("RTSP Stream", frame2)  # Display the RTSP stream
+
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    video1.release()
+    video2.release()
+    cv.destroyAllWindows()
