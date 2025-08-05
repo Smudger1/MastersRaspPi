@@ -61,8 +61,12 @@ def main():
 
         results = ncnn_model(frame1)  # Run inference on the first camera frame
         for result in results:
-            if result.names[result.class_id] == requested_object:
-                print(f"Detected {requested_object} in the first camera.")
+            # result.boxes.cls is a tensor of class indices
+            class_ids = result.boxes.cls.cpu().numpy().astype(int)
+            for class_id in class_ids:
+                class_name = result.names[class_id]
+                if class_name == requested_object:
+                    print(f"Detected {requested_object} in the first camera.")
 
         #cv.imshow("Camera Feed", frame1)  # Display the camera feed
 
