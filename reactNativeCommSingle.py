@@ -51,9 +51,11 @@ def main():
     while True:
         #ret, frame1 = video1.read()  # Read frame from the camera
 
-        frame1 = video1.take_photo()
+        photo_path = "./objectDetectionImgs/frame1.jpg"
+        video1.take_photo(photo_path)
+        frame1 = cv.imread(photo_path)
 
-        if not frame1:
+        if frame1 is None:
             print("Error: Could not read frame.")
             break
 
