@@ -7,6 +7,14 @@ from picamzero import Camera
 rtsp_URL = "http://192.168.0.169:81/stream"
 
 def setup():
+
+
+    if not os.path.exists("./objectDetectionImgs"):
+        ## Create directory for object detection images if it doesn't exist
+        print("Creating directory for object detection images...")
+        os.makedirs("./objectDetectionImgs")
+
+
     ## Load the YOLO model
     model = YOLO("yolo11n.pt")  # Load the YOLO
     model.export(format="ncnn")  # Export the model to NNC format
@@ -41,6 +49,8 @@ def main():
     print(f"Requested object: {requested_object}")
     while True:
         ret, frame1 = video1.read()  # Read frame from the camera
+
+        frame1 = video1.take_photo()
 
         if not ret:
             print("Error: Could not read frame.")
