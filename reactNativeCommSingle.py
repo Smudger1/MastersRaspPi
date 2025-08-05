@@ -49,11 +49,11 @@ def main():
     requested_object = getRequestedObject()
     print(f"Requested object: {requested_object}")
     while True:
-        ret, frame1 = video1.read()  # Read frame from the camera
+        #ret, frame1 = video1.read()  # Read frame from the camera
 
         frame1 = video1.take_photo()
 
-        if not ret:
+        if not frame1:
             print("Error: Could not read frame.")
             break
 
