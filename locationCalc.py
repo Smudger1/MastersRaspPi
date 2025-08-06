@@ -112,8 +112,11 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     print("Calculating angle...")
     # Calculate the angle between the two rays
     dot_product = np.dot(unit_ray_vector1, unit_ray_vector2)
+    print(f"Dot product: {dot_product}")
     dot_product = np.clip(dot_product, -1.0, 1.0)  # Ensure the value is within valid range for acos
+    print(f"Clipped dot product: {dot_product}")
     angle_radians = np.arccos(dot_product) # Calculate the angle in radians
+    print(f"Angle in radians: {angle_radians}")
     angle_degrees = np.degrees(angle_radians) # Convert radians to degrees
 
     return angle_degrees
