@@ -19,18 +19,17 @@ def getDepthMap(frame):
 
     encoder = 'vits' # or 'vits', 'vitb'
     dataset = 'hypersim' # 'hypersim' for indoor model, 'vkitti' for outdoor model
-    #max_depth = 20 # 20 for indoor model, 80 for outdoor model
+    max_depth = 20 # 20 for indoor model, 80 for outdoor model 
 
-    
-    checkpoint_path = f'./Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth'
+    checkpoint_path = f'./Depth-Anything-V2/metric_depth/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth'
     if not os.path.exists(checkpoint_path):
         print(f"ERROR: Checkpoint file not found at {checkpoint_path}")
         return None
 
     print(f"Loading DepthAnythingV2 model with encoder: {encoder}, dataset: {dataset}")
-    model = DepthAnythingV2(**model_configs[encoder])
+    model = DepthAnythingV2(**{**model_configs[encoder], 'max_depth': max_depth})
     model.load_state_dict(torch.load(checkpoint_path, map_location='cpu'))
-    model = model.to(DEVICE).eval()
+    model.eval()
 
     print("Model loaded successfully.")
     print("Processing image for depth estimation...")
