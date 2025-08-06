@@ -4,7 +4,7 @@ import torch
 
 import sys
 import os
-sys.path.append('./Depth-Anything-V2')
+sys.path.append('./Depth-Anything-V2/metric_depth')
 from depth_anything_v2.dpt import DepthAnythingV2
 
 def getDepthMap(frame):
