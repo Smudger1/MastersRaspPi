@@ -15,9 +15,9 @@ def getDepthMap(frame):
 
     encoder = 'vits' # or 'vits', 'vitb'
     dataset = 'hypersim' # 'hypersim' for indoor model, 'vkitti' for outdoor model
-    max_depth = 20 # 20 for indoor model, 80 for outdoor model
+    #max_depth = 20 # 20 for indoor model, 80 for outdoor model
 
-    model = DepthAnythingV2(**{**model_configs[encoder], 'max_depth': max_depth})
+    model = DepthAnythingV2(**model_configs[encoder])
     model.load_state_dict(torch.load(f'/Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth', map_location='cpu'))
     model.eval()
 
