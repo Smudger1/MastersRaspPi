@@ -78,7 +78,7 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     
 
     # Load camera calibration data
-    with open("calibration_data.pkl", "rb") as f:
+    with open("./calibration_data_master.pkl", "rb") as f:
         camera_matrix, dist_coeffs = pickle.load(f)
 
     # Undistort the image
