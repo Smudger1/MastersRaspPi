@@ -22,6 +22,8 @@ def getDepthMap(frame):
     model.load_state_dict(torch.load(f'./Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth', map_location='cpu'))
     model.eval()
 
+    image = cv.imread('./objectDetectionImgs/frame1.jpg')  # Load the image
+
     depth = model.infer_image(frame) # HxW depth map in meters in numpy
 
     depth_normalised = cv.normalize(depth, None, 0, 255, cv.NORM_MINMAX)
