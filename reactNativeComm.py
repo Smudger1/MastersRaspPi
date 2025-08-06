@@ -125,8 +125,8 @@ def main():
 
             if personResult is not None and objectResult is not None:
                 print("Found both person and requested object in master camera.")
-                print("DEBUG: Person bounding boxes:", personResult['box'])
-                print("DEBUG: Object bounding boxes:", objectResult['box'])
+                print("DEBUG: Person bounding boxes:", personResult['box'], personResult['class_name'])
+                print("DEBUG: Object bounding boxes:", objectResult['box'], objectResult['class_name'])
                 cameraFeed = 1
             else:
                 print("Error: Person or requested object not found in master camera.")
