@@ -47,7 +47,7 @@ def getRequestedObject():
     ## 62: tv
     ## 65: remote
     ## 73: book
-
+    """
     try:
         response = requests.get("http://localhost:5000/requested_object")
         if response.status_code == 200:
@@ -58,7 +58,8 @@ def getRequestedObject():
             return None
     except requests.RequestException as e:
         print(f"HTTP Request failed: {e}")
-        return None
+        return None"""
+    return "tv"
 
 def sendDistance(distance):
     try:
@@ -154,7 +155,7 @@ def main():
 
                 distance = calculateDistanceBetweenObjects(angle, distanceToPerson, distanceToObject)
                 print(f"Distance between person and {requested_object}: {distance} meters")
-                sendDistance(distance)
+                ##sendDistance(distance)
             else:
                 print("ERROR: Person or requested object not found in either camera.")
                 break
