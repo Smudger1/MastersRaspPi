@@ -23,26 +23,19 @@ def getDepthMap(frame):
     dataset = 'hypersim' # 'hypersim' for indoor model, 'vkitti' for outdoor model
     #max_depth = 20 # 20 for indoor model, 80 for outdoor model
 
-
-    checkpoint_path = f'./Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth'
-    if not os.path.exists(checkpoint_path):
-        print(f"ERROR: Checkpoint file not found at {checkpoint_path}")
-        return None
-        
-    print(f"Loading DepthAnythingV2 model with encoder: {encoder}, dataset: {dataset}")
     model = DepthAnythingV2(**model_configs[encoder])
-    model.load_state_dict(torch.load(f'./Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth', map_location='cpu'))
+    model.load_state_dict(torch.load(f'checkpoints/depth_anything_v2_{encoder}.pth', map_location='cpu'))
     model = model.to(DEVICE).eval()
 
     print("Model loaded successfully.")
     print("Processing image for depth estimation...")
     image = cv.imread('./objectDetectionImgs/frame1.jpg')  # Load the image
 
-    image_rgb = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-    print(f"Image shape: {image_rgb.shape}, dtype: {image_rgb.dtype}")
+    #image_rgb = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+    #print(f"Image shape: {image_rgb.shape}, dtype: {image_rgb.dtype}")
     
     print(f"Image shape: {image.shape}, dtype: {image.dtype}")
-    depth = model.infer_image(image_rgb) # HxW depth map in meters in numpy
+    depth = model.infer_image(image) # HxW depth map in meters in numpy
 
     print(f"Depth map shape: {depth.shape}, dtype: {depth.dtype}")
 
