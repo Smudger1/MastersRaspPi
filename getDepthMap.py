@@ -1,4 +1,5 @@
 import cv2 as cv
+import numpy as np
 import torch
 
 import sys
@@ -22,6 +23,11 @@ def getDepthMap(frame):
     model.eval()
 
     depth = model.infer_image(frame) # HxW depth map in meters in numpy
+
+    depth_normalised = cv.normalize(depth, None, 0, 255, cv.NORM_MINMAX)
+    depth_scaled = depth_normalised.astype(np.uint8)
+    depth_colored = cv.applyColorMap(depth_scaled, cv.COLORMAP_JET)
+    cv.imwrite("./objectDetectionImgs/depthMap.jpg", depth_colored)
 
     return depth
 
