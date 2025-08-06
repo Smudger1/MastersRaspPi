@@ -143,6 +143,8 @@ def main():
                 print("Calculating angle and distance...")
                 person_coords = calculateCenter(personResult.boxes.xyxy[0].numpy())
                 object_coords = calculateCenter(objectResult.boxes.xyxy[0].numpy())
+                print(f"Person coordinates: {person_coords}"
+                      f"\n{requested_object} coordinates: {object_coords}")
                 angle = calculateAngle(person_coords, object_coords)
 
                 print(f"Angle between person and {requested_object}: {angle} degrees")

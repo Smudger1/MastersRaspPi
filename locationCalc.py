@@ -60,6 +60,7 @@ def calculateCenter(obj_pixel_coords):
     :param obj_pixel_coords: Pixel coordinates of the object (x1, y1, x2, y2).
     :return: Center coordinates (center_x, center_y).
     """
+    print(f"Calculating center for object with pixel coordinates: {obj_pixel_coords}")
     x1, y1, x2, y2 = obj_pixel_coords
     center_x = (x1 + x2) / 2
     center_y = (y1 + y2) / 2
