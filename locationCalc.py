@@ -89,7 +89,7 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     pixel_points = np.array([obj1_pixel_coords, obj2_pixel_coords], dtype=np.float32)
     undistorted_points = cv.undistortPoints(pixel_points, camera_matrixM, dist_coeffsM, P=camera_matrixM)
 
-    print("Points undistorted.")
+    print(f"Undistorted points: {undistorted_points}")
     # Extract undistorted points
     undistorted_points1 = undistorted_points[0][0]
     undistorted_points2 = undistorted_points[0][1]
