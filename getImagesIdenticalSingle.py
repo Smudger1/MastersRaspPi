@@ -7,7 +7,7 @@ from time import sleep
 if not os.path.exists("./calibImgs"):
     os.makedirs("./calibImgs")
 
-#### Starting the image capture process for both cameras
+#### Starting the image capture process for Master cameras
 print("Starting image capture for Master cameras...")
 
 master_cam = Camera()
