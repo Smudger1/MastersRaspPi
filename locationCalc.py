@@ -92,7 +92,7 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     print(f"Undistorted points: {undistorted_points}")
     # Extract undistorted points
     undistorted_points1 = undistorted_points[0][0]
-    undistorted_points2 = undistorted_points[0][1]
+    undistorted_points2 = undistorted_points[1][0]
 
     print("Normalising points...")
     # Normalise the points to the camera coordinate system
