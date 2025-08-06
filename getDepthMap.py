@@ -18,7 +18,7 @@ def getDepthMap(frame):
     #max_depth = 20 # 20 for indoor model, 80 for outdoor model
 
     model = DepthAnythingV2(**model_configs[encoder])
-    model.load_state_dict(torch.load(f'/Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth', map_location='cpu'))
+    model.load_state_dict(torch.load(f'./Depth-Anything-V2/checkpoints/depth_anything_v2_metric_{dataset}_{encoder}.pth', map_location='cpu'))
     model.eval()
 
     depth = model.infer_image(frame) # HxW depth map in meters in numpy
