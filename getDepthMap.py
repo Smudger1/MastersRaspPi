@@ -24,7 +24,7 @@ def getDepthMap(frame):
 
     image = cv.imread('./objectDetectionImgs/frame1.jpg')  # Load the image
 
-    depth = model.infer_image(frame) # HxW depth map in meters in numpy
+    depth = model.infer_image(image) # HxW depth map in meters in numpy
 
     depth_normalised = cv.normalize(depth, None, 0, 255, cv.NORM_MINMAX)
     depth_scaled = depth_normalised.astype(np.uint8)
