@@ -1,6 +1,9 @@
 import cv2 as cv
 import torch
 
+import sys
+import os
+sys.path.append('/path/to/Depth-Anything-V2')
 from depth_anything_v2.dpt import DepthAnythingV2
 
 def getDepthMap(frame):

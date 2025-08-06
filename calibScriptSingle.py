@@ -33,6 +33,7 @@ images_master.sort()
 
 # Pair images by index (assuming same number and order)
 num_pairs = len(images_master)
+print(num_pairs)
 for i in range(num_pairs):
     fname_master = images_master[i]
 

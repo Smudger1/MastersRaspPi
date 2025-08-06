@@ -7,9 +7,11 @@ import requests
 from time import sleep
 from locationCalc import calculateDistanceBetweenObjects, calculateAngle, calculateCenter
 import os
+import sys
+sys.path.append('/Depth-Anything-V2')
 from getDepthMap import getDepthMap
 
-rtsp_URL = "http://192.168.0.169:81/stream"
+rtsp_URL = "http://192.168.68.61:81/stream"
 
 def setup():    
     if not os.path.exists("./objectDetectionImgs"):
