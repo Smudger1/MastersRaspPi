@@ -102,6 +102,7 @@ def main():
             for result in results:
                 # result.boxes.cls is a tensor of class indices
                 class_ids = result.boxes.cls.cpu().numpy().astype(int)
+                print(f"Detected classes in frame1: {class_ids}")
                 for class_id in class_ids:
                     class_name = result.names[class_id]
                     if class_name == requested_object and objectResult is None:
