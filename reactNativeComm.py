@@ -94,6 +94,10 @@ def main():
             frame1 = cv.imread(photo_path)
             ret2, frame2 = video2.read()  # Read frame from the RTSP stream
 
+            print("Truth values for frames:")
+            print(not frame1)
+            print(not frame2)
+
             if not frame1 and not frame2:
                 print("Error: Could not read frames.")
                 break
