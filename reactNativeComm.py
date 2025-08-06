@@ -76,18 +76,17 @@ def sendDistance(distance):
 
 def main():
     ncnn_model, video1, video2 = setup()
+    print("Setup complete.")
     requested_object = getRequestedObject()
+    print(f"Requested object: {requested_object}")
 
     personResult = None
     objectResult = None
     cameraFeed = None
 
-    if not requested_object:
-        print("No requested object to track.")
-        return None
-
     while True:
         while requested_object is not None:
+            print(f"Tracking {requested_object}...")
 
             # Read frame from both cameras
             photo_path = "./objectDetectionImgs/frame1.jpg"
