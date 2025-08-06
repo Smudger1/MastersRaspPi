@@ -76,32 +76,40 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     :param obj2_pixel_coords: Pixel coordinates of the second object (x, y).
     :return: Angle in degrees between the two objects.
     """
+
+    print(f"Calculating angle between objects with pixel coordinates: {obj1_pixel_coords} and {obj2_pixel_coords}")
     
 
     # Load camera calibration data
     with open("./calibration_data_master.pkl", "rb") as f:
         camera_matrixM, dist_coeffsM, rvecsM, tvecsM = pickle.load(f)
 
+    print("Undistorting points...")
     # Undistort the image
     pixel_points = np.array([obj1_pixel_coords, obj2_pixel_coords], dtype=np.float32)
     undistorted_points = cv.undistortPoints(pixel_points, camera_matrixM, dist_coeffsM, P=camera_matrixM)
 
+    print("Points undistorted.")
     # Extract undistorted points
     undistorted_points1 = undistorted_points[0][0]
     undistorted_points2 = undistorted_points[0][1]
 
-    # Normalize the points to the camera coordinate system
+    print("Normalising points...")
+    # Normalise the points to the camera coordinate system
     normalised_points1 = (undistorted_points1[0] + camera_matrixM[0, 2]) / camera_matrixM[0, 0], (undistorted_points1[1] + camera_matrixM[1, 2]) / camera_matrixM[1, 1]
     normalised_points2 = (undistorted_points2[0] + camera_matrixM[0, 2]) / camera_matrixM[0, 0], (undistorted_points2[1] + camera_matrixM[1, 2]) / camera_matrixM[1, 1]
 
+    print("Creating ray vectors...")
     # Create ray vectors from the normalized points
     ray_vector1 = np.array([normalised_points1[0], normalised_points1[1], 1.0])
     ray_vector2 = np.array([normalised_points2[0], normalised_points2[1], 1.0])
 
+    print("Normalising ray vectors...")
     # Normalize the ray vectors
     unit_ray_vector1 = ray_vector1 / np.linalg.norm(ray_vector1)
     unit_ray_vector2 = ray_vector2 / np.linalg.norm(ray_vector2)
 
+    print("Calculating angle...")
     # Calculate the angle between the two rays
     dot_product = np.dot(unit_ray_vector1, unit_ray_vector2)
     dot_product = np.clip(dot_product, -1.0, 1.0)  # Ensure the value is within valid range for acos
