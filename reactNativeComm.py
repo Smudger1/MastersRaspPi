@@ -103,20 +103,30 @@ def main():
                 # result.boxes.cls is a tensor of class indices
                 class_ids = result.boxes.cls.cpu().numpy().astype(int)
                 print(f"Detected classes in frame1: {class_ids}")
-                for class_id in class_ids:
+                for i, class_id in enumerate(class_ids):
                     class_name = result.names[class_id]
                     if class_name == requested_object and objectResult is None:
                         print(f"Detected {requested_object} in the first camera.")
-                        objectResult = result
+                        # Store only the specific bounding box, not the entire result
+                        objectResult = {
+                            'box': result.boxes.xyxy[i].cpu().numpy(),
+                            'class_name': class_name,
+                            'confidence': result.boxes.conf[i].cpu().numpy() if result.boxes.conf is not None else None
+                        }
                     elif class_name == 'person' and personResult is None:
-                        personResult = result
                         print("Person detected in the first camera.")
+                        # Store only the specific bounding box, not the entire result
+                        personResult = {
+                            'box': result.boxes.xyxy[i].cpu().numpy(),
+                            'class_name': class_name,
+                            'confidence': result.boxes.conf[i].cpu().numpy() if result.boxes.conf is not None else None
+                        }
 
 
             if personResult is not None and objectResult is not None:
                 print("Found both person and requested object in master camera.")
-                print("DEBUG: Person bounding boxes:", personResult.boxes.xyxy)
-                print("DEBUG: Object bounding boxes:", objectResult.boxes.xyxy)
+                print("DEBUG: Person bounding boxes:", personResult['box'])
+                print("DEBUG: Object bounding boxes:", objectResult['box'])
                 cameraFeed = 1
             else:
                 print("Error: Person or requested object not found in master camera.")
@@ -144,8 +154,8 @@ def main():
 
             if personResult is not None and objectResult is not None:
                 print("Calculating angle and distance...")
-                person_coords = calculateCenter(personResult.boxes.xyxy[0].numpy())
-                object_coords = calculateCenter(objectResult.boxes.xyxy[0].numpy())
+                person_coords = calculateCenter(personResult['box'])
+                object_coords = calculateCenter(objectResult['box'])
                 print(f"Person coordinates: {person_coords}"
                       f"\n{requested_object} coordinates: {object_coords}")
                 angle = calculateAngle(person_coords, object_coords)
