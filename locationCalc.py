@@ -79,19 +79,19 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
 
     # Load camera calibration data
     with open("./calibration_data_master.pkl", "rb") as f:
-        camera_matrix, dist_coeffs = pickle.load(f)
+        camera_matrixM, dist_coeffsM, rvecsM, tvecsM = pickle.load(f)
 
     # Undistort the image
     pixel_points = np.array([obj1_pixel_coords, obj2_pixel_coords], dtype=np.float32)
-    undistorted_points = cv.undistortPoints(pixel_points, camera_matrix, dist_coeffs, P=camera_matrix)
+    undistorted_points = cv.undistortPoints(pixel_points, camera_matrixM, dist_coeffsM, P=camera_matrixM)
 
     # Extract undistorted points
     undistorted_points1 = undistorted_points[0][0]
     undistorted_points2 = undistorted_points[0][1]
 
     # Normalize the points to the camera coordinate system
-    normalised_points1 = (undistorted_points1[0] + camera_matrix[0, 2]) / camera_matrix[0, 0], (undistorted_points1[1] + camera_matrix[1, 2]) / camera_matrix[1, 1]
-    normalised_points2 = (undistorted_points2[0] + camera_matrix[0, 2]) / camera_matrix[0, 0], (undistorted_points2[1] + camera_matrix[1, 2]) / camera_matrix[1, 1]
+    normalised_points1 = (undistorted_points1[0] + camera_matrixM[0, 2]) / camera_matrixM[0, 0], (undistorted_points1[1] + camera_matrixM[1, 2]) / camera_matrixM[1, 1]
+    normalised_points2 = (undistorted_points2[0] + camera_matrixM[0, 2]) / camera_matrixM[0, 0], (undistorted_points2[1] + camera_matrixM[1, 2]) / camera_matrixM[1, 1]
 
     # Create ray vectors from the normalized points
     ray_vector1 = np.array([normalised_points1[0], normalised_points1[1], 1.0])
