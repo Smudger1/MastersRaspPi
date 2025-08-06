@@ -168,6 +168,8 @@ def main():
                     depthMap = getDepthMap(frame2)
                 distanceToPerson = depthMap[int(person_coords[1]), int(person_coords[0])]
                 distanceToObject = depthMap[int(object_coords[1]), int(object_coords[0])]
+                print(f"Distance to person: {distanceToPerson} meters"
+                        f"\nDistance to {requested_object}: {distanceToObject} meters")
 
                 distance = calculateDistanceBetweenObjects(angle, distanceToPerson, distanceToObject)
                 print(f"Distance between person and {requested_object}: {distance} meters")
