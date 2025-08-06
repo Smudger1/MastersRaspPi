@@ -26,6 +26,9 @@ def getDepthMap(frame):
 
     depth = model.infer_image(image) # HxW depth map in meters in numpy
 
+    print(f"Depth map shape: {depth.shape}, dtype: {depth.dtype}")
+    
+
     depth_normalised = cv.normalize(depth, None, 0, 255, cv.NORM_MINMAX)
     depth_scaled = depth_normalised.astype(np.uint8)
     depth_colored = cv.applyColorMap(depth_scaled, cv.COLORMAP_JET)
