@@ -25,7 +25,7 @@ def calculateDistance(obj1_pixel_coords, obj2_pixel_coords, obj1_distance, obj2_
 
     # Extract undistorted points
     undistorted_points1 = undistorted_points[0][0]
-    undistorted_points2 = undistorted_points[0][1]
+    undistorted_points2 = undistorted_points[1][0]
 
     # Calculate pixel distance
     pixel_distance = np.linalg.norm(undistorted_points1 - undistorted_points2)
