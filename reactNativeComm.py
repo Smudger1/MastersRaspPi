@@ -11,7 +11,7 @@ import sys
 sys.path.append('/Depth-Anything-V2')
 from getDepthMap import getDepthMap
 
-rtsp_URL = "http://192.168.68.61:81/stream"
+rtsp_URL = "http://192.168.68.62:81/stream"
 
 def setup():    
     if not os.path.exists("./objectDetectionImgs"):
