@@ -17,8 +17,10 @@ def update_distance():
             print(f"Distance updated: {received_data['distance']}")
             return jsonify({"status": "success", "message": "Distance updated successfully"}), 200
         else:
+            print("Distance not provided in the request.")
             return jsonify({"status": "error", "message": "Distance not provided"}), 400
     else:
+        print("Invalid JSON format in the request.")
         return jsonify({"status": "error", "message": "Invalid JSON"}), 400
     
 @app.route('/update_requested_object', methods=['POST'])
@@ -30,6 +32,7 @@ def update_requested_object():
             print(f"Requested object updated: {received_data['requestedObject']}")
             return jsonify({"status": "success", "message": "Requested object updated successfully"}), 200
         else:
+            print("Requested object not provided in the request.")
             return jsonify({"status": "error", "message": "Requested object not provided"}), 400
     else:
         return jsonify({"status": "error", "message": "Invalid JSON"}), 400

@@ -65,6 +65,7 @@ def getRequestedObject():
 
 def sendDistance(distance):
     try:
+        distance = round(distance, 2)  # Round the distance to 2 decimal places
         response = requests.post("http://localhost:5000/update_distance", json={"distance": distance})
         if response.status_code == 200:
             print("Distance sent successfully.")
@@ -175,7 +176,7 @@ def main():
                 print(f"Using angle {angle} degrees, Distance between person and {requested_object}: {distance} meters")
                 distance2 = calculateDistance(person_coords, object_coords, distanceToPerson, distanceToObject)
                 print(f"Distance between person and {requested_object} using pixel coordinates: {distance2} meters")
-                ##sendDistance(distance)
+                sendDistance(distance)
 
                 print("Resetting results...")
                 personResult = None
