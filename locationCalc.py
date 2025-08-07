@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 import pickle
 
-def calculateDistance(imageLoc, obj1_pixel_coords, obj2_pixel_coords, obj1_distance, obj2_distance):
+def calculateDistance(obj1_pixel_coords, obj2_pixel_coords, obj1_distance, obj2_distance):
     """
     Calculate the distance between two objects in an image based on their pixel coordinates and known distances.
     
@@ -14,8 +14,6 @@ def calculateDistance(imageLoc, obj1_pixel_coords, obj2_pixel_coords, obj1_dista
     :return: Distance in meters between the two objects.
     """
     
-    # Load the image
-    image = cv.imread(imageLoc)
 
     # Load camera calibration data
     with open("calibration_data.pkl", "rb") as f:

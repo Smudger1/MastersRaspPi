@@ -5,7 +5,7 @@ from ultralytics import YOLO
 from picamzero import Camera
 import requests
 from time import sleep
-from locationCalc import calculateDistanceBetweenObjects, calculateAngle, calculateCenter
+from locationCalc import calculateDistanceBetweenObjects, calculateAngle, calculateCenter, calculateDistance
 import os
 import sys
 sys.path.append('/Depth-Anything-V2')
@@ -172,7 +172,9 @@ def main():
                         f"\nDistance to {requested_object}: {distanceToObject} meters")
 
                 distance = calculateDistanceBetweenObjects(angle, distanceToPerson, distanceToObject)
-                print(f"Distance between person and {requested_object}: {distance} meters")
+                print(f"Using angle {angle} degrees, Distance between person and {requested_object}: {distance} meters")
+                distance2 = calculateDistance(person_coords, object_coords, distanceToPerson, distanceToObject)
+                print(f"Distance between person and {requested_object} using pixel coordinates: {distance2} meters")
                 ##sendDistance(distance)
             else:
                 print("ERROR: Person or requested object not found in either camera.")
