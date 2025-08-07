@@ -48,3 +48,10 @@ def getDepthMap(frame):
 
     return depth
 
+if __name__ == "__main__":
+    frame = cv.imread('./objectDetectionImgs/frame1.jpg')  # Example image path
+    depth_map = getDepthMap(frame)
+    if depth_map is not None:
+        print("Depth map generated successfully.")
+    else:
+        print("Failed to generate depth map.")
