@@ -16,12 +16,12 @@ def calculateDistance(obj1_pixel_coords, obj2_pixel_coords, obj1_distance, obj2_
     
 
     # Load camera calibration data
-    with open("calibration_data.pkl", "rb") as f:
-        camera_matrix, dist_coeffs = pickle.load(f)
+    with open("calibration_data_master.pkl", "rb") as f:
+        camera_matrixM, dist_coeffsM, rvecsM, tvecsM = pickle.load(f)
 
     # Undistort the points
     pixel_points = np.array([obj1_pixel_coords, obj2_pixel_coords], dtype=np.float32)
-    undistorted_points = cv.undistortPoints(pixel_points, camera_matrix, dist_coeffs, P=camera_matrix)
+    undistorted_points = cv.undistortPoints(pixel_points, camera_matrixM, dist_coeffsM, P=camera_matrixM)
 
     # Extract undistorted points
     undistorted_points1 = undistorted_points[0][0]
