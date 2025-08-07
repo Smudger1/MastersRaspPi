@@ -77,30 +77,23 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
 
     print(f"Calculating angle between objects with pixel coordinates: {obj1_pixel_coords} and {obj2_pixel_coords}")
     
-
     # Load camera calibration data
     with open("./calibration_data_master.pkl", "rb") as f:
         camera_matrixM, dist_coeffsM, rvecsM, tvecsM = pickle.load(f)
 
     print("Undistorting points...")
-    # Undistort the image
     pixel_points = np.array([obj1_pixel_coords, obj2_pixel_coords], dtype=np.float32)
-    undistorted_points = cv.undistortPoints(pixel_points, camera_matrixM, dist_coeffsM, P=camera_matrixM)
+    # Use P=None to get normalized coordinates directly
+    undistorted_points = cv.undistortPoints(pixel_points, camera_matrixM, dist_coeffsM, P=None)
 
-    print(f"Undistorted points: {undistorted_points}")
-    # Extract undistorted points
+    # Extract undistorted normalized points (already in camera coordinate system)
     undistorted_points1 = undistorted_points[0][0]
     undistorted_points2 = undistorted_points[1][0]
 
-    print("Normalising points...")
-    # Normalise the points to the camera coordinate system
-    normalised_points1 = (undistorted_points1[0] + camera_matrixM[0, 2]) / camera_matrixM[0, 0], (undistorted_points1[1] + camera_matrixM[1, 2]) / camera_matrixM[1, 1]
-    normalised_points2 = (undistorted_points2[0] + camera_matrixM[0, 2]) / camera_matrixM[0, 0], (undistorted_points2[1] + camera_matrixM[1, 2]) / camera_matrixM[1, 1]
-
     print("Creating ray vectors...")
-    # Create ray vectors from the normalized points
-    ray_vector1 = np.array([normalised_points1[0], normalised_points1[1], 1.0])
-    ray_vector2 = np.array([normalised_points2[0], normalised_points2[1], 1.0])
+    # Create ray vectors from the normalized points (z=1 for camera coordinate system)
+    ray_vector1 = np.array([undistorted_points1[0], undistorted_points1[1], 1.0])
+    ray_vector2 = np.array([undistorted_points2[0], undistorted_points2[1], 1.0])
 
     print("Normalising ray vectors...")
     # Normalize the ray vectors
@@ -110,11 +103,9 @@ def calculateAngle(obj1_pixel_coords, obj2_pixel_coords):
     print("Calculating angle...")
     # Calculate the angle between the two rays
     dot_product = np.dot(unit_ray_vector1, unit_ray_vector2)
-    print(f"Dot product: {dot_product}")
-    dot_product = np.clip(dot_product, -1.0, 1.0)  # Ensure the value is within valid range for acos
-    print(f"Clipped dot product: {dot_product}")
-    angle_radians = np.arccos(dot_product) # Calculate the angle in radians
-    print(f"Angle in radians: {angle_radians}")
-    angle_degrees = np.degrees(angle_radians) # Convert radians to degrees
+    dot_product = np.clip(dot_product, -1.0, 1.0)
+    angle_radians = np.arccos(dot_product)
+    angle_degrees = np.degrees(angle_radians)
+    print(f"Angle calculated: {angle_degrees} degrees")
 
     return angle_degrees
