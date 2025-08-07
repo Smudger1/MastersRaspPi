@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 received_data = {'requestedObject': None, 'distance': None}
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return "Welcome to the Object Tracking API!"
 
