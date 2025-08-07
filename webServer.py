@@ -32,6 +32,7 @@ def update_requested_object():
     
 @app.route('/get_requested_object', methods=['GET'])
 def get_requested_object():
+    print(f"Requested object: {received_data['requestedObject']}")
     if received_data['requestedObject'] is not None:
         return jsonify({"requestedObject": received_data['requestedObject']}), 200
     else:
@@ -39,6 +40,7 @@ def get_requested_object():
     
 @app.route('/get_distance', methods=['GET'])
 def get_distance():
+    print(f"Distance: {received_data['distance']}")
     if received_data['distance'] is not None:
         return jsonify({"distance": received_data['distance']}), 200
     else:

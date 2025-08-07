@@ -176,6 +176,12 @@ def main():
                 distance2 = calculateDistance(person_coords, object_coords, distanceToPerson, distanceToObject)
                 print(f"Distance between person and {requested_object} using pixel coordinates: {distance2} meters")
                 ##sendDistance(distance)
+
+                print("Resetting results...")
+                personResult = None
+                objectResult = None
+                if os.path.exists("./objectDetectionImgs/frame1.jpg"):
+                    os.remove("./objectDetectionImgs/frame1.jpg")
             else:
                 print("ERROR: Person or requested object not found in either camera.")
                 break
