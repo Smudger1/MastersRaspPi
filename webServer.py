@@ -4,6 +4,10 @@ app = Flask(__name__)
 
 received_data = {'requestedObject': None, 'distance': None}
 
+@app.route('/')
+def index():
+    return "Welcome to the Object Tracking API!"
+
 @app.route('/update_distance', methods=['POST'])
 def update_distance():
     if request.is_json:
