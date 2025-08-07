@@ -180,14 +180,8 @@ def main():
                 print("ERROR: Person or requested object not found in either camera.")
                 break
 
-            cv.imshow("Camera Feed", frame1)  # Display the camera feed
-            cv.imshow("RTSP Stream", frame2)  # Display the RTSP stream
-
-
             ## Check if requested object has been found
             requested_object = getRequestedObject()
-
-            sleep(0.5) # Wait for a short period before the next iteration
 
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
